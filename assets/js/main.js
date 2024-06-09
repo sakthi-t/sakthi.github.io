@@ -295,7 +295,7 @@
           sentMessage.style.display = 'block';
           form.reset();
         } else {
-          errorMessage.textContent = responseData.error || 'There was a problem submitting the form.';
+          errorMessage.textContent = 'There was a problem submitting the form.';
           errorMessage.style.display = 'block';
         }
       } else {
@@ -309,6 +309,7 @@
       errorMessage.style.display = 'block';
     }
   });
+  
   
 
 
