@@ -266,18 +266,18 @@
    */
   document.getElementById('contact-form').addEventListener('submit', async function(event) {
     event.preventDefault();
-
+  
     const form = event.target;
     const loadingMessage = document.querySelector('.loading');
     const errorMessage = document.querySelector('.error-message');
     const sentMessage = document.querySelector('.sent-message');
-
+  
     loadingMessage.style.display = 'block';
     errorMessage.style.display = 'none';
     sentMessage.style.display = 'none';
-
+  
     const formData = new FormData(form);
-
+  
     try {
       const response = await fetch(form.action, {
         method: form.method,
@@ -286,12 +286,18 @@
           'Accept': 'application/json'
         }
       });
-
+  
       loadingMessage.style.display = 'none';
-
+  
       if (response.ok) {
-        sentMessage.style.display = 'block';
-        form.reset();
+        const responseData = await response.json();
+        if (responseData.ok) {
+          sentMessage.style.display = 'block';
+          form.reset();
+        } else {
+          errorMessage.textContent = responseData.error || 'There was a problem submitting the form.';
+          errorMessage.style.display = 'block';
+        }
       } else {
         const errorData = await response.json();
         errorMessage.textContent = errorData.error || 'There was a problem submitting the form.';
@@ -303,5 +309,7 @@
       errorMessage.style.display = 'block';
     }
   });
+  
+
 
 })()
