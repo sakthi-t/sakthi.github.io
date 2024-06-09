@@ -287,12 +287,17 @@
         }
       });
   
+      const responseData = await response.json();
       loadingMessage.style.display = 'none';
   
-      const responseData = await response.json();
       if (response.ok) {
         sentMessage.style.display = 'block';
         form.reset();
+  
+        // Check if the response contains a "next" field and redirect if it does
+        if (responseData.next) {
+          window.location.href = responseData.next;
+        }
       } else {
         errorMessage.textContent = responseData.error || 'There was a problem submitting the form.';
         errorMessage.style.display = 'block';
@@ -303,6 +308,7 @@
       errorMessage.style.display = 'block';
     }
   });
+  
   
 
 
