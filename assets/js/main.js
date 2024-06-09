@@ -264,6 +264,46 @@
   /**
    * Form submission handling
    */ 
+  document.getElementById('contact-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+  
+    const form = event.target;
+    const loadingMessage = document.querySelector('.loading');
+    const errorMessage = document.querySelector('.error-message');
+    const sentMessage = document.querySelector('.sent-message');
+  
+    loadingMessage.style.display = 'block';
+    errorMessage.style.display = 'none';
+    sentMessage.style.display = 'none';
+  
+    const formData = new FormData(form);
+  
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+  
+      loadingMessage.style.display = 'none';
+  
+      const responseData = await response.json();
+      if (response.ok) {
+        sentMessage.style.display = 'block';
+        form.reset();
+      } else {
+        errorMessage.textContent = responseData.error || 'There was a problem submitting the form.';
+        errorMessage.style.display = 'block';
+      }
+    } catch (error) {
+      loadingMessage.style.display = 'none';
+      errorMessage.textContent = 'There was a problem submitting the form.';
+      errorMessage.style.display = 'block';
+    }
+  });
+  
 
 
 })()
