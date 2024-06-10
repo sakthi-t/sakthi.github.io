@@ -264,7 +264,7 @@
   /**
    * Form submission handling
    */ 
-  document.getElementById('contact-form').addEventListener('submit', async function(event) {
+  document.getElementById('contact-form').addEventListener('submit', function(event) {
     event.preventDefault();
   
     const form = event.target;
@@ -276,39 +276,17 @@
     errorMessage.style.display = 'none';
     sentMessage.style.display = 'none';
   
-    const formData = new FormData(form);
-  
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-  
-      const responseData = await response.json();
-      loadingMessage.style.display = 'none';
-  
-      if (response.ok) {
+    emailjs.sendForm('service_ceumaqd', 'template_f2oepsd', form)
+      .then(function(response) {
+        loadingMessage.style.display = 'none';
         sentMessage.style.display = 'block';
         form.reset();
-  
-        // Check if the response contains a "next" field and redirect if it does
-        if (responseData.next) {
-          window.location.href = responseData.next;
-        }
-      } else {
-        errorMessage.textContent = responseData.error || 'There was a problem submitting the form.';
+      }, function(error) {
+        loadingMessage.style.display = 'none';
+        errorMessage.textContent = 'There was a problem submitting the form.';
         errorMessage.style.display = 'block';
-      }
-    } catch (error) {
-      loadingMessage.style.display = 'none';
-      errorMessage.textContent = 'There was a problem submitting the form.';
-      errorMessage.style.display = 'block';
-    }
+      });
   });
-  
   
 
 
